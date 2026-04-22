@@ -404,7 +404,7 @@ impl WorldManager {
             ChunkState::Listening {
                 authority,
                 priority: pri,
-            } => if *pri > priority {
+            } if *pri > priority => {
                 let cs = ChunkState::WantToGetAuth {
                     authority: *authority,
                     auth_priority: *pri,
@@ -420,11 +420,12 @@ impl WorldManager {
                 ));
                 self.chunk_state.insert(chunk, cs);
             }
+
             ChunkState::WantToGetAuth {
                 authority,
                 auth_priority: auth_pri,
                 my_priority: my_pri,
-            } => if *my_pri != priority {
+            } if *my_pri != priority => {
                 *my_pri = priority;
                 if *auth_pri <= priority {
                     let cs = ChunkState::Listening {
@@ -443,6 +444,7 @@ impl WorldManager {
                     ));
                 }
             }
+
             ChunkState::Authority {
                 listeners,
                 priority: pri,
